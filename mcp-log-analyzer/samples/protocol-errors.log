@@ -1,0 +1,11 @@
+2025-03-08T16:40:00.000Z INFO stdio rx: {"jsonrpc":"2.0","id":10,"method":"initialize"}
+2025-03-08T16:40:00.080Z INFO stdio tx: {"jsonrpc":"2.0","id":10,"result":{"protocolVersion":"2025-03-26"}}
+2025-03-08T16:40:01.000Z WARN stdio rx: {"jsonrpc":"2.0","method":"notifications/initialized"}
+2025-03-08T16:40:02.000Z INFO stdio rx: {"jsonrpc":"2.0","id":11,"method":"tools/call","params":{"name":"get_status"}}
+2025-03-08T16:40:02.045Z ERROR stdio tx: {"jsonrpc":"2.0","id":11,"error":{"code":-32601,"message":"Method not found"}}
+2025-03-08T16:40:03.000Z INFO stdio rx: {"jsonrpc":"1.0","id":12,"method":"tools/call","params":{"api_key":"sk-fakeSampleKey0123456789"}}
+2025-03-08T16:40:03.020Z INFO stdio rx: {"jsonrpc":"2.0","id":13,"method":"tools/call","params":{"github_token":"ghp_0123456789abcdefghijklmnopqrstuv"}}
+2025-03-08T16:40:03.040Z INFO stdio rx: {"jsonrpc":"2.0","id":14,"method":"tools/call","params":{"authorization":"Bearer fakeBearerToken_12345678901234567890"}}
+2025-03-08T16:40:03.060Z INFO stdio rx: {"jsonrpc":"2.0","id":15,"method":"tools/call","params":{"database":"postgresql://demo:fakePassword@localhost:5432/sampledb"}}
+2025-03-08T16:40:04.000Z ERROR stdio rx: {"jsonrpc":"2.0","id":16,"method":"tools/call","params":{"name":"bad-json"}
+2025-03-08T16:40:05.000Z ERROR stdio rx: {"jsonrpc":"2.0","id":17,"method":"tools/call","params":

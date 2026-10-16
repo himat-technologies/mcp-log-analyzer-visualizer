@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111827">
+  <title>MCP Log Analyzer &amp; Tracing Visualizer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="hero">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> LOCAL DEVELOPER TOOL</div>
+      <div class="hero-row">
+        <div>
+          <h1>MCP Log Analyzer <span>&amp; Tracing Visualizer</span></h1>
+          <p>Analyze MCP logs, inspect JSON-RPC messages, trace execution latency, and redact sensitive credentials.</p>
+        </div>
+        <div class="privacy"><span aria-hidden="true">&#9672;</span> 100% Browser-Local Processing</div>
+      </div>
+    </header>
+
+    <section class="panel input-panel" aria-labelledby="input-title">
+      <div class="section-heading">
+        <div><div class="step-label">01 / INPUT</div><h2 id="input-title">Your log stream</h2></div>
+        <span class="muted">Paste, upload, or start with a sample</span>
+      </div>
+      <label class="sr-only" for="log-input">Paste MCP logs</label>
+      <textarea id="log-input" spellcheck="false" placeholder="Paste MCP stdio, JSON-RPC, or SSE logs here..."></textarea>
+      <input id="file-input" type="file" accept=".log,.txt,.json,text/plain,application/json" hidden>
+      <div class="input-actions">
+        <div class="button-group">
+          <button class="button button-secondary" id="upload-button" type="button">Upload Log File</button>
+          <button class="button button-primary" id="analyze-button" type="button">Analyze Logs &rarr;</button>
+          <button class="button button-quiet" id="clear-button" type="button">Clear</button>
+        </div>
+        <span id="input-status" class="muted" role="status">Ready for local analysis</span>
+      </div>
+      <div class="sample-row">
+        <span class="sample-label">QUICK SAMPLES</span>
+        <button class="sample-button" data-sample="filesystem-trace.log" type="button">Filesystem MCP Trace</button>
+        <button class="sample-button" data-sample="protocol-errors.log" type="button">Protocol Error &amp; Redaction</button>
+        <button class="sample-button" data-sample="sse-multitool.log" type="button">SSE Multi-Tool Stream</button>
+      </div>
+    </section>
+
+    <section id="results" hidden>
+      <div class="section-heading dashboard-heading">
+        <div><div class="step-label">02 / OVERVIEW</div><h2>Analysis summary</h2></div>
+        <span id="issue-summary" class="issue-summary" aria-live="polite"></span>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card"><span class="stat-label">LOG FRAMES</span><strong id="stat-frames">0</strong><span class="stat-note">parsed entries</span></article>
+        <article class="stat-card"><span class="stat-label">VALID JSON-RPC</span><strong id="stat-valid">0</strong><span class="stat-note">messages recognized</span></article>
+        <article class="stat-card"><span class="stat-label">AVERAGE TOOL LATENCY</span><strong id="stat-latency">N/A</strong><span class="stat-note">timestamped tools/call cycles</span></article>
+        <article class="stat-card"><span class="stat-label">REDACTED SECRETS</span><strong id="stat-secrets">0</strong><span class="stat-note">detected occurrences</span></article>
+      </div>
+      <p class="redaction-note">Secret detection uses recognizable patterns and may miss unknown credential formats. Review the sanitized output before sharing.</p>
+
+      <section class="panel waterfall-panel" aria-labelledby="waterfall-title">
+        <div class="section-heading"><div><div class="step-label">03 / TRACE</div><h2 id="waterfall-title">Latency waterfall</h2></div><span class="muted">Requests and responses are matched by JSON-RPC ID</span></div>
+        <div id="waterfall" class="waterfall"><div class="empty-state">Matched request and response timestamps will appear here.</div></div>
+      </section>
+
+      <section class="panel frames-panel" aria-labelledby="frames-title">
+        <div class="section-heading"><div><div class="step-label">04 / INSPECT</div><h2 id="frames-title">Parsed frames <span id="frame-count" class="count-pill">0</span></h2></div></div>
+        <div class="filters">
+          <label>LOG LEVEL
+            <select id="level-filter"><option>All</option><option>INFO</option><option>WARN</option><option>ERROR</option><option>DEBUG</option></select>
+          </label>
+          <label>MESSAGE TYPE
+            <select id="type-filter"><option value="All">All</option><option value="request">Request</option><option value="response">Response</option><option value="notification">Notification</option><option value="error">Error</option></select>
+          </label>
+          <label class="method-filter">METHOD SEARCH
+            <input id="method-filter" type="search" placeholder="e.g. tools/call, initialize">
+          </label>
+          <button id="reset-filters" class="button button-quiet reset-button" type="button">Reset filters</button>
+        </div>
+        <div id="frames-list" class="frames-list"></div>
+      </section>
+
+      <section class="panel raw-panel" aria-labelledby="raw-title">
+        <div class="section-heading">
+          <div><div class="step-label">05 / SHARE SAFELY</div><h2 id="raw-title">Sanitized raw stream</h2></div>
+          <div class="button-group">
+            <button id="copy-button" class="button button-secondary" type="button">Copy Sanitized Logs</button>
+            <button id="download-button" class="button button-secondary" type="button">Download .log</button>
+          </div>
+        </div>
+        <pre id="sanitized-output" class="sanitized-output"></pre>
+        <div id="copy-status" class="muted" role="status" aria-live="polite"></div>
+      </section>
+    </section>
+    <section class="contact-card" aria-labelledby="contact-title">
+      <div class="contact-intro">
+        <div class="step-label">BUILT WITH CARE BY</div>
+        <h2 id="contact-title">Himat Technologies</h2>
+        <p>AI-first software development. Have a question or want to say hello? We’d love to hear from you.</p>
+        <a class="contact-demo" href="https://himat.tech/free-tools/mcp-log-analyzer-visualizer" target="_blank" rel="noopener noreferrer">Explore the live demo <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <nav class="contact-links" aria-label="Himat Technologies contact links">
+        <a class="contact-link contact-website" href="https://himat.co.in" target="_blank" rel="noopener noreferrer"><span class="contact-icon" aria-hidden="true">↗</span><span><strong>Website</strong><small>himat.co.in</small></span></a>
+        <a class="contact-link contact-linkedin" href="https://www.linkedin.com/in/himat-technologies-14b1051b4" target="_blank" rel="noopener noreferrer"><span class="contact-icon" aria-hidden="true">in</span><span><strong>LinkedIn</strong><small>Connect professionally</small></span></a>
+        <a class="contact-link contact-instagram" href="https://www.instagram.com/himat_technologies?stkn=djdmcGxweWtwYWI0" target="_blank" rel="noopener noreferrer"><span class="contact-icon" aria-hidden="true">◎</span><span><strong>Instagram</strong><small>@himat_technologies</small></span></a>
+        <a class="contact-link contact-facebook" href="https://www.facebook.com/people/Himat-technologies/61593829197445/" target="_blank" rel="noopener noreferrer"><span class="contact-icon" aria-hidden="true">f</span><span><strong>Facebook</strong><small>Follow our updates</small></span></a>
+        <a class="contact-link contact-email" href="mailto:info@himat.co.in"><span class="contact-icon" aria-hidden="true">@</span><span><strong>Email</strong><small>info@himat.co.in</small></span></a>
+        <a class="contact-link contact-phone" href="tel:9445234023"><span class="contact-icon" aria-hidden="true">☎</span><span><strong>Call us</strong><small>94452 34023</small></span></a>
+      </nav>
+    </section>
+    <footer>Runs entirely in your browser. Log contents are not uploaded or transmitted.</footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

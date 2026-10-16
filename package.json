@@ -1,0 +1,8 @@
+{
+  "name": "mcp-log-analyzer-visualizer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "start \"\" \".\\mcp-log-analyzer\\index.html\""
+  }
+}
